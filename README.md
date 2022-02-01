@@ -1,4 +1,4 @@
-@doop/service-{{FIXME}}
+@doop/avatar
 ==================
 
-A {{FIXME}} service for the [Doop framework](https://github.com/MomsFriendlyDevCo/Doop).
+An avatar service for the [Doop framework](https://github.com/MomsFriendlyDevCo/Doop).
