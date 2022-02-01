@@ -1,10 +1,10 @@
 {
-  "name": "@doop/service-{{FIXME}}",
+  "name": "@doop/avatar",
   "version": "1.0.0",
-  "description": "A {{FIXME}} service for the Doop framework",
+  "description": "An avatar service for the Doop framework",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MomsFriendlyDevCo/doop-service-{{FIXME}}.git"
+    "url": "git+https://github.com/MomsFriendlyDevCo/doop-avatar.git"
   },
   "keywords": [
     "doop"
@@ -12,9 +12,11 @@
   "author": "Matt Carter <m@ttcarter.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MomsFriendlyDevCo/doop-service-{{FIXME}}/issues"
+    "url": "https://github.com/MomsFriendlyDevCo/doop-avatar/issues"
   },
-  "homepage": "https://github.com/MomsFriendlyDevCo/doop-service-{{FIXME}}#readme",
+  "homepage": "https://github.com/MomsFriendlyDevCo/doop-avatar#readme",
   "dependencies": {
+    "@doop/files": "^1.0.2",
+    "jscrypto": "^1.0.3"
   }
 }
