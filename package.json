@@ -18,5 +18,8 @@
   "dependencies": {
     "@doop/files": "^1.0.2",
     "jscrypto": "^1.0.3"
-  }
+  },
+  "workspaces": [
+    "../*"
+  ]
 }
