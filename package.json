@@ -1,6 +1,6 @@
 {
   "name": "@doop/avatar",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "An avatar service for the Doop framework",
   "repository": {
     "type": "git",
@@ -17,6 +17,9 @@
   "homepage": "https://github.com/MomsFriendlyDevCo/doop-avatar#readme",
   "dependencies": {
     "@doop/files": "^1.0.2",
-    "jscrypto": "^1.0.3"
+    "axios": "^0.26.1",
+    "debug": "^4.3.3",
+    "jscrypto": "^1.0.3",
+    "lodash": "^4.17.21"
   }
 }
