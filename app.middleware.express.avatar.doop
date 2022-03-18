@@ -124,7 +124,7 @@ app.middleware.express.avatar = options => {
 					switch (module) {
 						case 'url':
 							// Url {{{
-							if (settings.url && _.hasIn(entity, settings.url)) {
+							if (settings.url && !_.isEmpty(_.get(entity, settings.url))) {
 								avatar.url = _.get(entity, settings.url);
 								return true;
 							}
@@ -132,7 +132,7 @@ app.middleware.express.avatar = options => {
 							// }}}
 						case 'gravatar':
 							// Gravatar {{{
-							if (settings.gravatar && _.hasIn(entity, settings.gravatar)) {
+							if (settings.gravatar && !_.isEmpty(_.get(entity, settings.gravatar))) {
 								avatar.url = {
 									url: 'https://gravatar.com/avatar/' + crypto.createHash('md5').update(_.get(entity, settings.gravatar).toString()).digest('hex'),
 									params: {
@@ -146,7 +146,7 @@ app.middleware.express.avatar = options => {
 							// }}}
 						case 'location':
 							// Location (from lat / lng or street address) {{{
-							if (settings.location && _.hasIn(entity, settings.location)) {
+							if (settings.location && !_.isEmpty(_.get(entity, settings.location))) {
 								let entityLocation = _.get(entity, settings.location);
 
 								let location = _.defaults({}, {
@@ -175,7 +175,7 @@ app.middleware.express.avatar = options => {
 							// }}}
 						case 'fallbackUrl':
 							// fallbackUrl {{{
-							if (_.isString(settings.fallbackUrl)) {
+							if (_.isString(settings.fallbackUrl) && !_.isEmpty(settings.fallbackUrl)) {
 								avatar.url = settings.fallbackUrl;
 								return true;
 							}
