@@ -15,6 +15,7 @@ let debug = require('debug')('avatar');
 * @param {boolean} [cache=true] Whether to enable caching, if true an existing cache avatar is used if found instead of refetching
 * @param {string} [cachePath="app.config.paths.data/avatars"] Where to cache fetched avatars
 * @param {function} [errHandler] How to handle errors, called as `(error, req, res)`
+* @param {string|number} [size=400] Either the size in pixels for the width + height or the path to the size parameter (overrides width / height if found)
 * @param {number} [width=400] Ideal width when requesting avatars
 * @param {number} [height=400] Ideal height when requesting avatars
 *
@@ -53,6 +54,7 @@ app.middleware.express.avatar = options => {
 		cache: true,
 		cachePath: `${app.config.paths.data}/avatars`,
 		errHandler: (e, req, res) => res.sendError(e),
+		size: undefined,
 		width: 400,
 		height: 400,
 
@@ -89,6 +91,8 @@ app.middleware.express.avatar = options => {
 			entity: {},
 			cachePath: '',
 			url: '',
+			width: settings.width,
+			height: settings.height,
 		};
 
 		return Promise.resolve()
@@ -105,7 +109,19 @@ app.middleware.express.avatar = options => {
 			.then(([entity]) => {
 				avatar.id = _.get(entity, settings.entityId);
 				avatar.entity = entity;
-				avatar.cachePath = `${settings.cachePath}/${avatar.id}.png`;
+				// Compute width + height / size {{{
+				if (settings.size) {
+					if (isFinite(settings.size)) {
+						[avatar.width, avatar.height] = [settings.size, settings.size];
+					} else if (_.isString(settings.size)) {
+						let computedSize = _.get({...entity, req}, settings.size);
+						if (computedSize) [avatar.width, avatar.height] = [computedSize, computedSize];
+					} else {
+						throw new Error('Size parameter must be a number or string path');
+					}
+				}
+				// }}}
+				avatar.cachePath = `${settings.cachePath}/${avatar.id}-${avatar.width}x${avatar.height}.png`;
 
 				return settings.cache
 					? fs.promises.access(avatar.cachePath)
@@ -119,6 +135,7 @@ app.middleware.express.avatar = options => {
 			})
 			.then(entity => {
 				// Find the module to use based on the first successful criteria
+
 				settings.order.find(module => {
 					debug(`Trying module "${module}" for Avatar ID "${avatar.id}"`);
 					switch (module) {
@@ -136,7 +153,7 @@ app.middleware.express.avatar = options => {
 								avatar.url = {
 									url: 'https://gravatar.com/avatar/' + crypto.createHash('md5').update(_.get(entity, settings.gravatar).toString()).digest('hex'),
 									params: {
-										size: settings.width,
+										size: Math.max(avatar.width, avatar.height),
 										d: settings.gravatarStyle,
 									},
 								};
@@ -156,8 +173,8 @@ app.middleware.express.avatar = options => {
 									lon: _.get(entityLocation, settings.locationLon),
 									zoom: _.get(entityLocation, settings.locationZoom),
 									brearing: _.get(entityLocation, settings.locationBearing),
-									width: settings.width,
-									height: settings.height,
+									width: avatar.width,
+									height: avatar.height,
 								}, settings.locationDefaults);
 								debug({location, thumbnail: entity.thumbnail});
 
